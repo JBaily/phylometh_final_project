@@ -1,0 +1,9 @@
+Pruesse, E., Peplies, J. and Glöckner, F.O. (2012) SINA: accurate high-throughput multiple sequence alignment of ribosomal RNA genes. Opens external link in new windowBioinformatics, 28, 1823-1829
+
+Parameters used: 
+
+
+Workflow: Denovo with user sequences only 
+Program: RAxML
+Model: GTR
+Rate model: Gamma

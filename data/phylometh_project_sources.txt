@@ -1,0 +1,45 @@
+Sources for metabolism categories 
+
+General heterotrophs
+https://pubmed.ncbi.nlm.nih.gov/11760935/  - Family Opitutaceae Genus Opitutus
+https://pubmed.ncbi.nlm.nih.gov/20622056/ - Genus Armatimonas
+https://pubmed.ncbi.nlm.nih.gov/19578813/ - Family Legionellaceae (pathogens are by definition typically heterotrophs). 
+https://pubmed.ncbi.nlm.nih.gov/24535138/ - Genus Terrimicrobium 
+https://www.nature.com/articles/ismej2016123 - Genus Rhodopirellula
+https://pubmed.ncbi.nlm.nih.gov/26702614/ - Family Saprospiraceae
+https://www.microbiologyresearch.org/content/journal/ijsem/10.1099/ijs.0.64504-0#tab2 - Family Saprospiraceae
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3658858/ - Family Aeromonadaceae
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6418085/ - Family Chitinophagaceae
+https://www.sciencedirect.com/science/article/pii/S0723202019303455 - Family Gemmataceae
+https://pubmed.ncbi.nlm.nih.gov/12957910/ - Genus Polynucleobacter
+https://pubmed.ncbi.nlm.nih.gov/27798560/ - Chthoniobacteraceae
+
+
+
+Only anecdotal support -- B1-7BS, Pedosphaeraceae, Neisseriaceae, env.OPS 17, MWH-UniP1 aquatic group, Clade III, Sporichthyaceae, Ilumatobacteraceae
+
+
+
+
+Methylotrophs
+https://link.springer.com/referenceworkentry/10.1007%2F978-3-642-30197-1_243 - family Methylophilaceae
+
+Methanotrophs
+https://www.frontiersin.org/articles/10.3389/fmicb.2018.03162/full - order Methylococcales (families Methylococcaceae and Methylomonadaceae)
+
+Ammonia Oxidizers
+https://link.springer.com/referenceworkentry/10.1007%2F978-3-642-30197-1_372 - family Nitrosomonadaceae
+
+Sulfate reducers
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2702500/ - Genus Desulfobacterium
+https://link.springer.com/content/pdf/10.1007%2F978-3-642-39044-9_267.pdf - Genus Desulfobulbus
+https://pubmed.ncbi.nlm.nih.gov/11594625/ - Desulforegula conservatrix
+https://link.springer.com/referenceworkentry/10.1007%2F978-3-642-39044-9_266 - Genera Desulfatirhabdium and Desulfobacula
+
+Nitrogen fixers
+https://www.frontiersin.org/articles/10.3389/fmicb.2018.02710/full - Genus Roseomonas
+https://www.jstor.org/stable/23383258?seq=1#metadata_info_tab_contents - Genus Nodularia
+https://academic.oup.com/femsec/article/48/3/345/583434 - Genus Cylindrospermopsis CRJ1
+https://academic.oup.com/femsle/article/279/1/15/498772 - Genus Azohydromonas
+
+ 
