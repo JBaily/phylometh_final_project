@@ -351,3 +351,74 @@ create_sample_matrix <- function(OTU, name1, name2){
   
   return(blah)
 }
+
+convert.pick.2 <- function(pick_matrix, ncol, name){
+  
+  temp <- pick_matrix
+  final <- matrix(NA, nrow = length(temp)+1, ncol = ncol+1)
+  
+  final[1,] <- name
+  
+  for(i in 1:length(temp)){
+    
+    current <-i
+    new <- i+1
+    
+    final[[new,1]] <- paste0(names(temp)[current],"-3")
+    final[[new,2]] <- temp[[current]][,1] + temp[[current]][,2] + temp[[current]][,3] + temp[[current]][,8]
+    final[[new,3]] <- temp[[current]][,5]
+    final[[new,4]] <- temp[[current]][,6]
+    final[[new,5]] <- temp[[current]][,9]
+    final[[new,6]] <- temp[[current]][,4]
+    final[[new,7]] <- temp[[current]][,7]
+    
+  }
+  
+  final <- t(final)
+  colnames(final) <- as.matrix(final[1,])
+  final <- final[-1,]
+  row.names(final) <- as.matrix(final[,1])
+  final <- final[,-1]
+  
+  class(final) <- "numeric"
+  
+  return(final)
+}
+
+create_sample_matrix_all <- function(OTU, name1, name2, name3){
+  
+  temp <- OTU
+  blah <- matrix(NA, nrow = ncol(OTU), ncol = 3)
+  
+  colnames(blah) <- c("method","points","bacteria")
+  row.names(blah) <- t(colnames(temp))
+  
+  stop1 <- nrow(blah)/3
+  print(stop1)
+  
+  stop2 <- (nrow(blah)/3)*2
+  print(stop2)
+  
+  for(i in 1:stop1){
+    
+    blah[[i,1]] <- name1
+    blah[[i,2]] <- 2
+    blah[[i,3]] <- colnames(temp)[i]
+  }
+  
+  for(i in (stop1+1):stop2){
+    
+    blah[[i,1]] <- name2
+    blah[[i,2]] <- 2
+    blah[[i,3]] <- colnames(temp)[i-stop1]
+  }
+  
+  for(i in (stop2+1):nrow(blah)){
+    
+    blah[[i,1]] <- name3
+    blah[[i,2]] <- 2
+    blah[[i,3]] <- colnames(temp)[i-stop2]
+  }
+  
+  return(blah)
+}

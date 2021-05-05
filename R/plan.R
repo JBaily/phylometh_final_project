@@ -1,5 +1,12 @@
 plan <- drake_plan(
-  #Getting a tree and some data -- lets try something simple like cats.
+  
+  #Getting a tree and data
+  #Tree is constructed with 16S sequences from my samples and relative 
+  #abundance data is also from my samples. 
+  
+  #The tree was constructed and data aligned using the SILVA SINA program, the 
+  #reference for which is in "data/arb-silva/SILVA_SINA_documentation.txt", 
+  #for inquiring minds. 
 
   tree = read.tree("data/project.tree"),
   tree_test = plot.phylo(tree, cex = 0.4),
@@ -109,6 +116,12 @@ plan <- drake_plan(
   anc.ml.control.results = do.call(rbind, anc.ml.test),
   print.results(anc.ml.control.results, "anc_ml_control"),
   
+  ############################################################################
+  
+  ######################################
+  ### Comparing the different models ###
+  ######################################
+  
   #I will be using the Maximum likelihood trees for the rest of this analysis, 
   #though I believe this would work for the parsimony trees as well. 
   
@@ -124,6 +137,10 @@ plan <- drake_plan(
   #improved upon in the future, by me or by someone else. 
   
   #GEN - 11, 22, 23, 31. NF - 13, AO - 32, SR - 33, ME - 21, & MY - 12. 
+  
+  #########################################
+  ### Control vs. Machine-picked (test) ###
+  #########################################
   
   control.2.mat = convert.control(anc.ml.control,6,
                                   c("Node","GEN","NF","AO","SR","ME","MY")),
@@ -161,4 +178,80 @@ plan <- drake_plan(
   ### relative abundance as a proxy for general metabolic classes is not viable.
 
   
+  ############################################################################
+  ############################################################################
+  
+  
+  #############################   Extras   ####################################
+  
+  #############################################################################
+  ### Comparing the all two point models (control, "test", and hand-picked) ###
+  #############################################################################
+  
+  pick.2.mat = convert.pick.2(anc.ml.pick,6,
+                              c("Node","GEN","NF","AO","SR","ME","MY")),
+  
+  comp.2.OTU.all = cbind(control.2.mat, test.2.mat, pick.2.mat),
+  comp.2.samp.all = create_sample_matrix_all(comp.2.OTU.all, "control", "test.2", "pick.2"),
+  
+  comp.2.OTU.t.all = otu_table(comp.2.OTU.all, taxa_are_rows = TRUE),
+  comp.2.samp.t.all = sample_data(as.data.frame(comp.2.samp.all)),
+  
+  ps.object.2.all = phyloseq(comp.2.OTU.t.all, comp.2.samp.t.all),
+  
+  ord.nmds.bray.all = ordinate(ps.object.2.all, method = "NMDS", 
+                           distance = "bray", trymax = 1000),
+  nmds.bay.plot.2.all = plot_ordination(ps.object.2.all, ord.nmds.bray.all, 
+                                    shape = "method", color = "bacteria", 
+                                    title="Bray NMDS"),
+  plot(nmds.bay.plot.2.all),
+  
+  comp.ct = subset_samples(ps.object.2.all, method=="control" | method=="test.2"), #comparing control and test - same as earlier
+  comp.cp = subset_samples(ps.object.2.all, method=="control" | method=="pick.2"), #comparing control and pick 
+  comp.pt = subset_samples(ps.object.2.all, method=="test.2" | method=="pick.2"), #comparing pick and test, just for fun. 
+  
+  distance.bray.2.all = phyloseq::distance(ps.object.2.all, method = "bray"),
+  sample.dataframe.all = data.frame(sample_data(ps.object.2.all)),
+  
+  distance.bray.2.ct = phyloseq::distance(comp.ct, method = "bray"),
+  sample.dataframe.ct = data.frame(sample_data(comp.ct)),
+  
+  distance.bray.2.cp = phyloseq::distance(comp.cp, method = "bray"),
+  sample.dataframe.cp = data.frame(sample_data(comp.cp)),
+  
+  distance.bray.2.pt = phyloseq::distance(comp.pt, method = "bray"),
+  sample.dataframe.pt = data.frame(sample_data(comp.pt)),
+  
+  permanova.2.all = adonis(distance.bray.2.all ~ method, data = sample.dataframe.all),
+  permanova.2.ct = adonis(distance.bray.2.ct ~ method, data = sample.dataframe.ct),
+  permanova.2.cp = adonis(distance.bray.2.cp ~ method, data = sample.dataframe.cp),
+  permanova.2.pt = adonis(distance.bray.2.pt ~ method, data = sample.dataframe.pt),
+  
+  print(permanova.2.all),
+  print(permanova.2.ct),
+  print(permanova.2.cp),
+  print(permanova.2.pt),
+  
+  print.results(permanova.2.all, "permanova_two_sites_all"),
+  print.results(permanova.2.ct, "permanova_two_sites_ct"),
+  print.results(permanova.2.cp, "permanova_two_sites_cp"),
+  print.results(permanova.2.pt, "permanova_two_sites_pt"),
+  
+  ### In a surprising turn of events, the p-value for the hand-picked time 
+  ### points and the control is actually much higher than that of the computer
+  ### picked time points (0.093 vs. 0.001). While I would absolutely not call 
+  ### the hand-picked time points a particularly good reconstruction as 
+  ### compared to the control model, I suppose I would call it serviceable? The
+  ### PERMANOVA test, at least, does not think the two models are significantly
+  ### different, at least. This does seem to speak to the complexity of chosing
+  ### time-points, however, as selecting for the time points with the most 
+  ### variability does not translate to meaningful data, but just eyeballing it
+  ### does. Given that I noticed the patterns by eyeballing, that does check
+  ### out. HOWEVER, I nearly completely discarded the hand-picked time points, 
+  ### as the ancestral reconstruction, did not "look as good" as the machine
+  ### -picked one, which serves as a caution against not confirming your 
+  ### suspicions with actual statistical analysis. 
+
+  ### I suspect that a hand-picked 3 time-point model would be even better, 
+  ### though that is just supposition for now. 
 )
