@@ -2,7 +2,7 @@ print.results <- function(data, name){
   
   temp <- data 
   
-  filename = paste0("results/",name)
+  filename = paste0("results/",name,".txt")
   sink(file=filename)
   print(temp)
   sink()
@@ -212,7 +212,7 @@ assign.control <- function(data){
 }
 
 plot_sim_tree <- function(simm, label) {
-  filename = paste0("results/SimmMap_",label)
+  filename = paste0("results/SimmMap_",label,".pdf")
   pdf(file=filename)
   phytools::plotSimmap(simm[[1]], fsize = 0.5)
   dev.off()
@@ -222,7 +222,7 @@ print_plotAnc <- function(phyDat, recon, type,cex) {
   
     phangorn::plotAnc(phyDat, recon,1, cex.pie = par("cex.sub"), cex.sub = 0.4, cex=cex)
     
-    filename = paste0("results/",type)
+    filename = paste0("results/",type,".pdf")
     pdf(file=filename)
     phangorn::plotAnc(phyDat, recon,1, cex.pie = par("cex.sub"), cex.sub = 0.4, cex=cex)
     dev.off()

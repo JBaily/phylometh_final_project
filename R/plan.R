@@ -10,7 +10,7 @@ plan <- drake_plan(
 
   tree = read.tree("data/project.tree"),
   tree_test = plot.phylo(tree, cex = 0.4),
-  tree_image = plot_tree(file=file_out("results/initial_tree"), tree, 
+  tree_image = plot_tree(file=file_out("results/initial_tree.pdf"), tree, 
                          type = "phylogram", label = TRUE, cex = 0.4),
   data.test.1 = read.csv(file="data/phylometh_project_data_test.csv", sep = ",",
                            stringsAsFactors=FALSE, row.names = 1, header= TRUE),
