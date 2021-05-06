@@ -1,0 +1,15 @@
+
+Call:
+adonis(formula = distance.bray.3 ~ method, data = sample.dataframe.3) 
+
+Permutation: free
+Number of permutations: 999
+
+Terms added sequentially (first to last)
+
+           Df SumsOfSqs MeanSqs F.Model      R2 Pr(>F)  
+method      1     0.611 0.61131  1.9745 0.01148  0.089 .
+Residuals 170    52.633 0.30960         0.98852         
+Total     171    53.244                 1.00000         
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1

@@ -251,7 +251,110 @@ plan <- drake_plan(
   ### as the ancestral reconstruction, did not "look as good" as the machine
   ### -picked one, which serves as a caution against not confirming your 
   ### suspicions with actual statistical analysis. 
+  
+  
+  
+  #######################################################
+  ### Trying the procedure with three time-point data ###
+  #######################################################
+  
+  ### Computer-selected time points###
+  
+  print(data.test.sd),
+  print(data.test.sd.ordered),
+  which.values.comp.3 = c(names(data.test.sd.ordered)[1], 
+                        names(data.test.sd.ordered)[2],
+                        names(data.test.sd.ordered)[3]),
+  best.values.comp.3 = c(data.test.sd.ordered[1], data.test.sd.ordered[2], 
+                         data.test.sd.ordered[3]),
+  print(which.values.comp.3),
+  print(best.values.comp.3),
+  
+  to.keep.3 = c(which.values.comp.3[1],which.values.comp.3[2],
+              which.values.comp.3[3]), 
+  data.test.3.3 = data.test.2[,to.keep.3],
+  print(data.test.3.3),
+  data.test.4.3 = assign.states.3(data.test.3.3), 
+  
+  all.states = c(111,112,113,121,122,123,131,132,133,211,212,213,
+                 221,222,223,231,232,233,311,312,313,321,322,323,
+                 331,332,333),
+  missing.states = data.test.4.3$missing,
+  present.states = all.states[! all.states %in% missing.states],
+  print(present.states),
+  print(missing.states),
+  
+  cleaned.test.3 = CleanData(tree, data.test.4.3$state.data), 
+  
+  cleaned.test.3.phyDat = phangorn::phyDat(cleaned.test.3$data, type="USER", 
+                                         levels = as.character(present.states)), 
 
-  ### I suspect that a hand-picked 3 time-point model would be even better, 
-  ### though that is just supposition for now. 
+  anc.ml.test.3 = phangorn::ancestral.pml(phangorn::pml(cleaned.test.3$phy, 
+                                                      cleaned.test.3.phyDat), 
+                                        type="ml"),
+  plot.test.ml.3 = print_plotAnc(cleaned.test.3$phy, anc.ml.test.3, 
+                               type="test_ml_anc_recon.three_states", cex=0.4),
+  anc.ml.test.results.3 = do.call(rbind, anc.ml.test.3),
+  print.results(anc.ml.test.results.3, "anc_ml_test.three_states"),
+  
+  test.3.mat = convert.test.3(anc.ml.test.3,6,
+                              c("Node","GEN","NF","AO","SR","ME","MY")),
+  
+  comp.3.OTU = convert_to_OTU_table(control.2.mat, test.3.mat),
+  comp.3.samp = create_sample_matrix(comp.3.OTU, "control", "test.triple"),
+  
+  comp.3.OTU.t = otu_table(comp.3.OTU, taxa_are_rows = TRUE),
+  comp.3.samp.t = sample_data(as.data.frame(comp.3.samp)),
+  
+  ps.object.3 = phyloseq(comp.3.OTU.t, comp.3.samp.t),
+  
+  ord.nmds.bray.3 = ordinate(ps.object.3, method = "NMDS", distance = "bray", 
+                             trymax = 500),
+  nmds.bay.plot.3 = plot_ordination(ps.object.3, ord.nmds.bray.3, shape = "method", 
+                                    color = "bacteria", title="Bray NMDS"),
+  plot(nmds.bay.plot.3),
+
+  ### You can already see from the NMDS plot that there are a lot more overlaps
+  ### between nodes from the control and the triple method. They also tend to 
+  ### approximate each other much better this time around as well. 
+  
+  distance.bray.3 = phyloseq::distance(ps.object.3, method = "bray"),
+  sample.dataframe.3 = data.frame(sample_data(ps.object.3)),
+  
+  permanova.3 = adonis(distance.bray.3 ~ method, data = sample.dataframe.3),
+  print(permanova.3),
+  print.results(permanova.3, "permanova_three_sites"),
+  
+  ### With a p-value of 0.089, this model is slightly worse than the two site
+  ### hand-picked method, which I find really interesting. The pattern of this
+  ### NMDS prompted me to go back and look at the "all" NMDS and I was found
+  ### that the pick and control nodes also tended to coincide about as 
+  ### frequently as the three site computer model did, which I had not picked 
+  ### up on the first time. It's a bit mind-boggling that just a bit of human
+  ### consideration can bump up the quality of this model so much--have an 8
+  ### state model be more accurate (presumably) than a 27 state model--and I do 
+  ### not even know if I picked the optimal points! All of this seems to point
+  ### to instituting a brute-force method across two, three, and maybe even 
+  ### four site models (I suspect model quality will act a bit like a horseshoe
+  ### here--more resolution of the occasionally erratic patterns might confuse
+  ### the method) to find the optimal model. The only problem with this is that 
+  ### I still have no idea how to program R to make the match judgements that I 
+  ### do when comparing the various test reconstructions to the control. I do 
+  ### not think that is particularly possible within in the span of a day, 
+  ### however, but it is definitely something to think about in the future--
+  ### outlining the specific thought process and decision tree that I go through 
+  ### to make those assignments, that is. I also think increasing the number of
+  ### sequences in the tree might help a tad, too, but that's a secondary 
+  ### concern, I believe. I'd also want to consolidate the functions that only 
+  ### differ in the size of the input matrix that they handle, like 
+  ### convert.test.2/convert.test.3 and the "create_sample_matrix", for
+  ### instance. And the ones where I consolidate the values in the test models
+  ### to align with the control model, but I think that one will be much easier,
+  ### as it's just a matter of adjusting the inputs of the functions, not 
+  ### broadly abstracting the function as with the previous group of functions. 
+  
+  ### Overall, this was pretty fun and I've learned so much, both from this 
+  ### project and absolutely from the class as a whole. This has to be
+  ### one of the most informative classes that I have ever taken, so thank you 
+  ### Brian and I hope you have a wonderful summer! 
 )
